@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,7 +66,6 @@ public class Main {
                 if (lastTime != time) {
                     lastTime = time;
                     if (args[0].equals("exec")) {
-                        System.out.println("Detectando anomalías:");
                         ArrayList<String> anomalies = detectAnomalies(args[2], args[3], path, weekDay, time);
                         processAnomalies(anomalies, secondsFromMidnight, args[5]);
                     } else if (args[0].equals("train")) {
@@ -76,7 +74,7 @@ public class Main {
                         throw new Exception("Parámetro incorrecto (exec/train)");
                     }
                 }
-                Thread.sleep(T);
+                Thread.sleep(T*1000);
             } catch (Exception ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 System.exit(0);
@@ -100,6 +98,9 @@ public class Main {
 
         String content = new String(Files.readAllBytes(path), "UTF-8");
 
+        PrintWriter pw = new PrintWriter(path.toString());
+        pw.close();
+
         if (content.equals("")) {
             return anomalies;
         }
@@ -121,7 +122,7 @@ public class Main {
         ArrayList<String> finalAddrsDB = new ArrayList<>(Arrays.asList(addrs));
 
         for (String addr : finalAddrs) {
-            if(!finalAddrsDB.contains(addr)){
+            if (!finalAddrsDB.contains(addr)) {
                 anomalies.add(addr);
             }
         }
@@ -139,6 +140,9 @@ public class Main {
     private static void addDataToDB(String user, String passwd, Path path, int weekDay, int time) throws Exception {
 
         String content = new String(Files.readAllBytes(path), "UTF-8");
+        PrintWriter pw = new PrintWriter(path.toString());
+        pw.close();
+
         ArrayList<String> finalAddrs = new ArrayList<>();
 
         if (content.equals("")) {
@@ -170,11 +174,12 @@ public class Main {
      */
     private static void processAnomalies(ArrayList<String> anomalies, long secondsFromMidnight, String path) {
 
-        PrintWriter writer;
-        String output = anomalies.toString();
         try {
+            PrintWriter writer = new PrintWriter(path, "UTF-8");
+            writer.close();
+            String output = anomalies.toString();
             writer = new PrintWriter(path, "UTF-8");
-            writer.println(output.substring(1, output.length()-1));
+            writer.println(output.substring(1, output.length() - 1));
             writer.close();
 
         } catch (Exception ex) {
