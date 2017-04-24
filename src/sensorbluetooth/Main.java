@@ -6,7 +6,6 @@ package sensorbluetooth;
  * @author UPM (member of DHARMA Development Team) (http://dharma.inf.um.es)
  * @version 1.0
  */
-import com.google.gson.Gson;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -74,7 +73,7 @@ public class Main {
                         throw new Exception("Parámetro incorrecto (exec/train)");
                     }
                 }
-                Thread.sleep(T*1000);
+                Thread.sleep(T * 1000);
             } catch (Exception ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 System.exit(0);
