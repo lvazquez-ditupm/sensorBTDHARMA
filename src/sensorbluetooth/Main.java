@@ -122,6 +122,7 @@ public class Main {
 
         for (String addr : finalAddrs) {
             if (!finalAddrsDB.contains(addr)) {
+                addr="\""+addr+"\"";
                 anomalies.add(addr);
             }
         }
